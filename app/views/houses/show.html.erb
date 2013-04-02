@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Title:</b>
+  <%= @house.title %>
+</p>
+
+<p>
+  <b>Description:</b>
+  <%= @house.description %>
+</p>
+
+<p>
+  <b>Flag:</b>
+  <%= @house.flag %>
+</p>
+
+<p>
+  <b>Counter:</b>
+  <%= @house.counter %>
+</p>
+
+
+<%= link_to 'Edit', edit_house_path(@house) %> |
+<%= link_to 'Back', houses_path %>
