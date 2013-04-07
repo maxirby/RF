@@ -3,15 +3,29 @@ class HousesController < ApplicationController
   include HousesHelper
 
   def refresh
-    # @houses = House.all
-    # @house_tmp = House.new
+
+    incrementGlobalCounter
+
+    counter = getGlobalCounter
+
     titles, descriptions = getRfInformation
-    titles.each do |house|
-      if House.find_by_title_and_description(house, descriptions[titles.index(house)]).nil?
-        @house = House.new(:title => house, :description => descriptions[titles.index(house)], :counter => 1, :flag => 2)
+
+    #refresh houses listings
+    titles.each_with_index do |house, i|
+      pHouse = House.find_by_title_and_description(house, descriptions[i])
+      if pHouse == nil
+        @house = House.new(:title => house, :description => descriptions[i], :counter => counter, :flag => 2)
         @house.save
+      else
+        pHouse.counter += 1
+        pHouse.save
       end
     end
+
+    markSoldHouses
+
+    markFakeSoldHouses
+
     redirect_to houses_path and return
   end
 

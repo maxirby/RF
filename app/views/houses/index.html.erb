@@ -1,6 +1,7 @@
+<div class="houses">
 <h1>Listing houses</h1>
 
-<table>
+<table class="houses">
   <tr>
     <th>Title</th>
     <th>Description</th>
@@ -11,8 +12,9 @@
     <th></th>
   </tr>
 
-<% @houses.each do |house| %>
-  <tr>
+<% @houses.each_with_index do |house, index| %>
+  <tr class="flag<%=house.flag%>">
+    <td><%= index %></td>
     <td><%= house.title %></td>
     <td><%= house.description %></td>
     <td><%= house.flag %></td>
@@ -27,3 +29,4 @@
 <br />
 
 <%= link_to 'New House', new_house_path %>
+</div>

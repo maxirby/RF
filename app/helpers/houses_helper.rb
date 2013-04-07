@@ -5,6 +5,26 @@ RF = "http://www.raiffeisenbank.rs"
 
 module HousesHelper
 
+  def incrementGlobalCounter
+    cfg_counter = MyConfig.find_by_name("counter")
+    cfg_counter.value = (cfg_counter.value.to_i + 1).to_s
+    cfg_counter.save
+  end
+
+  def getGlobalCounter
+    cfg_counter = MyConfig.find_by_name("counter")
+    cfg_counter.value.to_i
+  end
+
+  def markSoldHouses
+    House.all.each { |house| house.counter = -100 if house.counter != getGlobalCounter and house.counter >= 0; house.flag = 4 if house.counter == -100; house.save }
+  end
+
+  def markFakeSoldHouses
+    House.all.each { |house| house.flag = 3 if house.counter > -100 and house.counter < 0; house.save }
+  end
+
+  #take and parse content from RF site
   def getRfInformation
     link = ""
     links = []
@@ -35,22 +55,28 @@ module HousesHelper
     #offset=0 is the same as link
     links.insert(0, link)
 
+    links = links.uniq
     #get nepokretnosti all from offset 0
     #doc = Nokogiri::HTML(open('http://www.raiffeisenbank.rs/code/navigate.aspx?Id=466&offset=0'))
 
     links.each do |page_offset|
+      p "PAGE_OFFSET", page_offset
       doc = Nokogiri::HTML(open(page_offset))
       doc.css('p.newstitle > a').each do |node|
         #puts node.text.encode('utf-8'), node['href']
         #puts node.text.encode('utf-8')
         titles <<  node.text.encode('utf-8')
+        p "TITLES", titles[titles.length-1]
       end
       doc.css('div.optimize').each do |node|
         #puts node.text.encode('utf-8'), node['href']
         #puts node.text.encode('utf-8')
         descriptions << node.text.encode('utf-8')
+        p "DESCRIPTIONS", descriptions[descriptions.length-1]
       end
     end
+    # titles.delete_at(0); descriptions.delete_at(0)
+    p "SIZE", titles.length, descriptions.length
     return titles, descriptions
   end
 

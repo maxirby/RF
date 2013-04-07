@@ -11,3 +11,23 @@
  *= require_self
  *= require_tree .
  */
+
+html {
+    background-color:#ccdbce;
+}
+
+.houses{
+    background-color:#ccdbce;
+}
+
+.flag4{ /*yellow*/
+      background-color:#ffff22;
+}
+
+.flag3{ /*red*/
+      background-color:#ff0000;
+}
+
+.flag2{
+      background-color:#ccdbce;
+}
