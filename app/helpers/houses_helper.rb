@@ -2,6 +2,7 @@ require 'nokogiri'
 require 'open-uri'
 
 RF = "http://www.raiffeisenbank.rs"
+DEF_FAKE_COUNTER = -1000
 
 module HousesHelper
 
@@ -17,11 +18,11 @@ module HousesHelper
   end
 
   def markSoldHouses
-    House.all.each { |house| house.counter = -100 if house.counter != getGlobalCounter and house.counter >= 0; house.flag = 4 if house.counter == -100; house.save }
+    House.all.each { |house| house.counter = DEF_FAKE_COUNTER if house.counter != getGlobalCounter and house.counter >= 0; house.flag = 4 if house.counter == DEF_FAKE_COUNTER; house.save }
   end
 
   def markFakeSoldHouses
-    House.all.each { |house| house.flag = 3 if house.counter > -100 and house.counter < 0; house.save }
+    House.all.each { |house| house.flag = 3 if house.counter > DEF_FAKE_COUNTER and house.counter < 0; house.save }
   end
 
   #take and parse content from RF site
@@ -75,7 +76,8 @@ module HousesHelper
         p "DESCRIPTIONS", descriptions[descriptions.length-1]
       end
     end
-    # titles.delete_at(0); descriptions.delete_at(0)
+    #titles.delete_at(0); descriptions.delete_at(0)
+    #titles  << "vlada"; descriptions << "descriptions"
     p "SIZE", titles.length, descriptions.length
     return titles, descriptions
   end

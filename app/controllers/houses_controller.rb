@@ -14,7 +14,7 @@ class HousesController < ApplicationController
     titles.each_with_index do |house, i|
       pHouse = House.find_by_title_and_description(house, descriptions[i])
       if pHouse == nil
-        @house = House.new(:title => house, :description => descriptions[i], :counter => counter, :flag => 2)
+        @house = House.new(:title => house, :description => descriptions[i], :counter => counter, :flag => (counter == 1 ? 2 : 5) )
         @house.save
       else
         pHouse.counter += 1
